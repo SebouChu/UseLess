@@ -34,7 +34,7 @@ Achievement à paliers validés selon le temps passé sur un site (tableau de do
 >{
 >	"id": "objectiveId",
 >	"name": "nomObjectif",
->	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"]
+>	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"],
 >	"website": ["facebook.com", "www.facebook.com"],
 >	"minutesByLevel": [60, 120, 240, 720, 1440],
 >	"maxLevel": 5
@@ -57,7 +57,7 @@ Achievement à paliers validés selon le nombre de pages visités sur un site (t
 >{
 >	"id": "objectiveId",
 >	"name": "nomObjectif",
->	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"]
+>	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"],
 >	"website": ["facebook.com", "www.facebook.com"],
 >	"countByLevel": [1, 10, 100, 1000, 10000],
 >	"maxLevel": 5

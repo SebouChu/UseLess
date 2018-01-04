@@ -4,7 +4,7 @@
 
 - OneTimeAchievement
 - UptimeAchievement
-- CounterAchievement
+- CounterAchievement (*coming soon*)
 
 ## Détails
 
@@ -15,14 +15,14 @@ Achievement unique validé avec une simple condition.
 >Objet exemple :
 >``` javascript
 >{
-  >   "name": "nomObjectif",
-  >   "description": "descriptionObjectif",
-  >   "website": ["facebook.com", "www.facebook.com"],
-  >   "verified": false|true
+	>	"id": "objectiveId",
+  >	"name": "nomObjectif",
+  >	"description": "descriptionObjectif",
+  >	"website": ["facebook.com", "www.facebook.com"]
 >}
 >```
 
-Si une condition est vérifiée, assigne "true" à l'achievement correspondant
+Si une condition est vérifiée, assigne "true" à l'id correspondant dans le chromeStorage.
 
 
 ### UptimeAchievement :
@@ -32,37 +32,41 @@ Achievement à paliers validés selon le temps passé sur un site (tableau de do
 >Objet exemple :
 >``` javascript
 >{
-  >   "name": "nomObjectif",
-  >   "description": "descriptionObjectif",
-  >   "website": ["facebook.com", "www.facebook.com"],
-  >   "minutesByLevel": [60, 120, 240, 720, 1440],
-  >   "currentLevel": 0,
-  >   "maxLevel": 5
+	>	"id": "objectiveId",
+  >	"name": "nomObjectif",
+	>	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"]
+  >	"website": ["facebook.com", "www.facebook.com"],
+  >	"minutesByLevel": [60, 120, 240, 720, 1440],
+  >	"maxLevel": 5
 >}
 >```
 
-Si maxLevel != currentLevel :
-- Proposition 1 :
-	- Au changement du domaine de l'URL, on enregistre/reset le datetime de départ (currentTabUptime)
-	- setInterval(f(), n) => On compare toutes les n millisecondes le datetime enregistré et le datetime actuel et on assigne un niveau supérieur si condition vérifiée
-- Proposition 2 :
-	- Au changement du domaine de l'URL, setTimeout(f(), n) => On laisse n millisecondes couler avant d'exécuter f() qui vérifie le niveau de l'utilisateur et assigne une valeur incrémentée si mérité
+Dans le chromeStorage, on a un attribut "objectiveId" et un attribut "objectiveId_uptime"
 
-### CounterAchievement :
+Toutes les secondes :
+- On ajoute 1 à "objectiveId_uptime"
+- Si maxLevel != level dans le chromeStorage :
+	- On compare l'uptime au prochain palier, s'il est égal, on incrémente l'attribut "objectiveId"
+
+### CounterAchievement (*coming soon*) :
 
 Achievement à paliers validés selon le nombre de pages visités sur un site (tableau de domaines)
 
 >Objet exemple :
 >``` javascript
 >{
-  >"name": "nomObjectif",
-  >"description": "descriptionObjectif",
-  >"website": ["facebook.com", "www.facebook.com"],
-  >"counter": 1000,
-  >"currentLevel": 1,
-  >"maxLevel": 5
+	>	"id": "objectiveId",
+  >	"name": "nomObjectif",
+  >	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"]
+  >	"website": ["facebook.com", "www.facebook.com"],
+  >	"countByLevel": [1, 10, 100, 1000, 10000],
+  >	"maxLevel": 5
 >}
 >```
 
-Au lancement de Chrome, on crée un objet achievementsByDomain avec des paires URL-tableau d'index des objectifs dans le tableau counterAchievements
-A chaque changement d'URL, on incrémente les objectifs correspondants au domaine
+Dans le chromeStorage, on a un attribut "objectiveId" et un attribut "objectiveId_count"
+
+A chaque changement de page :
+- On ajoute 1 à "objectiveId_count"
+- Si maxLevel != level dans le chromeStorage :
+	- On compare le count au prochain palier, s'il est égal, on incrémente l'attribut "objectiveId"

@@ -22,7 +22,7 @@ Achievement unique validé avec une simple condition.
 >}
 >```
 
-Si une condition est vérifiée, assigne "true" à l'id correspondant dans le chromeStorage.
+Si une condition est vérifiée, assigne un objet contenant un attribut "achieved" à true et la date courante à l'id correspondant dans le chromeStorage.
 
 
 ### UptimeAchievement :
@@ -45,8 +45,8 @@ Dans le chromeStorage, on a un attribut "objectiveId" et un attribut "objectiveI
 
 Toutes les secondes :
 - On ajoute 1 à "objectiveId_uptime"
-- Si maxLevel != level dans le chromeStorage :
-	- On compare l'uptime au prochain palier, s'il est égal, on incrémente l'attribut "objectiveId"
+- Si maxLevel != currentLevel dans le chromeStorage :
+	- On compare l'uptime au prochain palier, s'il est égal, on incrémente l'attribut "currentLevel" de l'objet dans "objectiveId" et on change la date stockée.
 
 ### CounterAchievement (*coming soon*) :
 
@@ -68,5 +68,5 @@ Dans le chromeStorage, on a un attribut "objectiveId" et un attribut "objectiveI
 
 A chaque changement de page :
 - On ajoute 1 à "objectiveId_count"
-- Si maxLevel != level dans le chromeStorage :
-	- On compare le count au prochain palier, s'il est égal, on incrémente l'attribut "objectiveId"
+- Si maxLevel != currentLevel dans le chromeStorage :
+	- On compare le count au prochain palier, s'il est égal, on incrémente l'attribut "currentLevel" de l'objet dans "objectiveId" et on change la date stockée.

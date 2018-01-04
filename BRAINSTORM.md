@@ -15,10 +15,10 @@ Achievement unique validé avec une simple condition.
 >Objet exemple :
 >``` javascript
 >{
-	>	"id": "objectiveId",
-  >	"name": "nomObjectif",
-  >	"description": "descriptionObjectif",
-  >	"website": ["facebook.com", "www.facebook.com"]
+>	"id": "objectiveId",
+>	"name": "nomObjectif",
+>	"description": "descriptionObjectif",
+>	"website": ["facebook.com", "www.facebook.com"]
 >}
 >```
 
@@ -32,12 +32,12 @@ Achievement à paliers validés selon le temps passé sur un site (tableau de do
 >Objet exemple :
 >``` javascript
 >{
-	>	"id": "objectiveId",
-  >	"name": "nomObjectif",
-	>	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"]
-  >	"website": ["facebook.com", "www.facebook.com"],
-  >	"minutesByLevel": [60, 120, 240, 720, 1440],
-  >	"maxLevel": 5
+>	"id": "objectiveId",
+>	"name": "nomObjectif",
+>	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"]
+>	"website": ["facebook.com", "www.facebook.com"],
+>	"minutesByLevel": [60, 120, 240, 720, 1440],
+>	"maxLevel": 5
 >}
 >```
 
@@ -55,12 +55,12 @@ Achievement à paliers validés selon le nombre de pages visités sur un site (t
 >Objet exemple :
 >``` javascript
 >{
-	>	"id": "objectiveId",
-  >	"name": "nomObjectif",
-  >	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"]
-  >	"website": ["facebook.com", "www.facebook.com"],
-  >	"countByLevel": [1, 10, 100, 1000, 10000],
-  >	"maxLevel": 5
+>	"id": "objectiveId",
+>	"name": "nomObjectif",
+>	"descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"]
+>	"website": ["facebook.com", "www.facebook.com"],
+>	"countByLevel": [1, 10, 100, 1000, 10000],
+>	"maxLevel": 5
 >}
 >```
 

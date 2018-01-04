@@ -1,0 +1,8 @@
+[
+  {
+    "name": "nomObjectif",
+    "description": "descriptionObjectif",
+    "website": ["facebook.com", "www.facebook.com"],
+    "verified": false|true
+  }
+]

@@ -51,55 +51,52 @@ function openExtensionPage() {
  ****************/
 
 chrome.runtime.onInstalled.addListener(function() {
-  initOneTimeAchievements();
-  initUptimeAchievements();
-  showStorage();
+  initStorageData();
 });
 
 chrome.browserAction.onClicked.addListener(function() {
   openExtensionPage();
 });
 
-// Initialise les OneTimeAchievements dans le Chrome Storage
-function initOneTimeAchievements() {
-  var oneTimeAchievementsByWebsite = {};
-  getJSON("achievements/onetime.json").then(function(json) {
-    for (var i = 0 ; i < json.length ; i++) {
-
-      // Remplit l'objet faisant correspondre les domaines aux index
-      for (var j = 0 ; j < json[i]["website"].length ; j++) {
-        if(oneTimeAchievementsByWebsite[json[i]["website"][j]] === undefined) {
-          oneTimeAchievementsByWebsite[json[i]["website"][j]] = [i];
-        } else {
-          oneTimeAchievementsByWebsite[json[i]["website"][j]].push(i);
-        }
-      }
-
-    }
-    chrome.storage.sync.set({"onetimeWebsites": oneTimeAchievementsByWebsite});
+function initStorageData() {
+  getJSON("achievements/onetime.json").then(function(onetimeJSON) {
+    getJSON("achievements/uptime.json").then(function(uptimeJSON) {
+      var achievementsByDomain = getAchievementsByDomain(onetimeJSON, uptimeJSON);
+      chrome.storage.sync.set(achievementsByDomain, function() {
+        console.log("Storage data initialized.");
+        showStorage();
+      });
+    });
   });
 }
 
-// Initialise les UptimeAchievements dans le Chrome Storage
-function initUptimeAchievements() {
-  var uptimeAchievementsByWebsite = {};
-  getJSON("achievements/uptime.json").then(function(json) {
-    for (var i = 0 ; i < json.length ; i++) {
+function getAchievementsByDomain(onetimeJSON, uptimeJSON) {
+  var onetimeAchievementsByDomain = {};
+  var uptimeAchievementsByDomain = {};
 
-      // Remplit l'objet faisant correspondre les domaines aux index
-      for (var j = 0 ; j < json[i]["website"].length ; j++) {
-        if(uptimeAchievementsByWebsite[json[i]["website"][j]] === undefined) {
-          uptimeAchievementsByWebsite[json[i]["website"][j]] = [i];
-        } else {
-          uptimeAchievementsByWebsite[json[i]["website"][j]].push(i);
-        }
-      }
-
+  // On hydrate l'objet onetimeAchievementsByDomain avec onetimeJSON...
+  for (var i = 0 ; i < onetimeJSON.length ; i++) {
+    for (var j = 0 ; j < onetimeJSON[i]["domains"].length ; j++) {
+      onetimeAchievementsByDomain[onetimeJSON[i]["domains"][j]] = i; // ... en faisant correspondre les domaines aux index correspondants
     }
-    chrome.storage.sync.set({"uptimeWebsites": uptimeAchievementsByWebsite});
-  });
-}
+  }
 
+  for (var i = 0 ; i < uptimeJSON.length ; i++) {
+    // On hydrate l'objet uptimeAchievementsByDomain avec uptimeJSON...
+    for (var j = 0 ; j < uptimeJSON[i]["domains"].length ; j++) {
+      uptimeAchievementsByDomain[uptimeJSON[i]["domains"][j]] = i; // ... en faisant correspondre les domaines aux index correspondants
+    }
+  }
+
+  // On retourne les objets par un objet parent qui sera envoyé au Chrome Storage
+  var achievementsByDomain = {
+    "onetimeDomains": onetimeAchievementsByDomain,
+    "uptimeDomains": uptimeAchievementsByDomain
+  }
+
+  return achievementsByDomain;
+
+}
 
 
 /****************
@@ -112,13 +109,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var match = request.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/);
   var domain = match[1];
 
-  chrome.storage.sync.get("onetimeWebsites", function(result) {
+  chrome.storage.sync.get("onetimeDomains", function(result) {
     // Si le domaine possède un ou des achievements
-    if(result["onetimeWebsites"][domain] !== undefined) {
+    if(result["onetimeDomains"][domain] !== undefined) {
       getJSON("achievements/onetime.json").then(function(json) {
         // On parcourt les achievementsIndex du domaine
-        for (var i = 0 ; i < result["onetimeWebsites"][domain].length ; i++) {
-          var achievementIndex = result["onetimeWebsites"][domain][i];
+        for (var i = 0 ; i < result["onetimeDomains"][domain].length ; i++) {
+          var achievementIndex = result["onetimeDomains"][domain][i];
           // On récupère l'achievement correspondant dans le JSON
           var achievement = json[achievementIndex];
           checkAchievement(achievement, currentDate.toLocaleString());

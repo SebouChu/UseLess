@@ -26,7 +26,7 @@ let onetimeProto = `<div class="onetime-achievement __achieved__">
     <img src="__img-link__" alt="__name__">
   </div>
   <div class="text-container">
-    <p><strong>__name__</strong></p>
+    <p><strong>__name____achieved-subtitle__</strong></p>
     <p>__description__</p>
   </div>
 </div>`;
@@ -53,8 +53,11 @@ function generateOnetimeElt(achievement, isLast = false) {
   chrome.storage.sync.get(achievement["id"], function(result) {
     if(!result[achievement["id"]]) {
       onetimeElt = onetimeElt.replace(/__achieved__/, "");
+      onetimeElt = onetimeElt.replace(/__achieved-subtitle__/, "");
     } else {
       onetimeElt = onetimeElt.replace(/__achieved__/, "achieved");
+      var formattedDate = result[achievement["id"]]["date"].toLocaleString()
+      onetimeElt = onetimeElt.replace(/__achieved-subtitle__/, " <em>(obtenu le "+formattedDate+")</em>");
     }
     onetimeAchievements += onetimeElt;
     if (isLast) {

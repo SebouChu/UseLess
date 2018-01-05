@@ -121,7 +121,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           var achievementIndex = result["onetimeWebsites"][domain][i];
           // On récupère l'achievement correspondant dans le JSON
           var achievement = json[achievementIndex];
-          checkAchievement(achievement, currentDate);
+          checkAchievement(achievement, currentDate.toLocaleString());
         }
       });
     }

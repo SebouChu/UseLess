@@ -51,10 +51,13 @@ function openExtensionPage() {
  ****************/
 
 chrome.runtime.onInstalled.addListener(function() {
-  openExtensionPage();
   initOneTimeAchievements();
   initUptimeAchievements();
   showStorage();
+});
+
+chrome.browserAction.onClicked.addListener(function() {
+  openExtensionPage();
 });
 
 // Initialise les OneTimeAchievements dans le Chrome Storage
@@ -118,7 +121,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           var achievementIndex = result["onetimeWebsites"][domain][i];
           // On récupère l'achievement correspondant dans le JSON
           var achievement = json[achievementIndex];
-          checkAchievement(achievement);
+          checkAchievement(achievement, currentDate);
         }
       });
     }
@@ -126,7 +129,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 // Check l'achievement s'il n'est pas déjà obtenu
-function checkAchievement(achievement) {
+function checkAchievement(achievement, currentDate) {
   chrome.storage.sync.get(achievement["id"], function(result) {
     // Si l'achievement n'est pas déjà obtenu, on l'active
     if(!result[achievement["id"]]) {

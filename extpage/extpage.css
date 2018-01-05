@@ -1,0 +1,30 @@
+#onetime-achievements {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.onetime-achievement {
+  width: 30em;
+  margin: 1em;
+  border: 1px solid black;
+  padding: 10px;
+  background: grey;
+  opacity: 0.6;
+}
+
+.onetime-achievement.achieved {
+  background: white;
+  opacity: 1;
+}
+
+.onetime-achievement .icon-container, .onetime-achievement .text-container {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+img {
+  width: 100px;
+  height: auto;
+}

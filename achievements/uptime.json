@@ -1,0 +1,67 @@
+[
+  {
+    "id": "fbuptime",
+    "name": "Facebook",
+    "descriptionByLevel": ["Novice", "Intermmédiaire", "Aficionado", "Virtuose", "Maître du social"],
+    "icon": "assets/icons/fbuptime.png",
+    "website": ["facebook.com"],
+    "minutesByLevel": [30, 60, 300, 720, 1440],
+    "maxLevel": 5
+  },
+  {
+    "id": "twituptime",
+    "name": "Twitter",
+    "descriptionByLevel": ["Novice", "Intermmédiaire", "Twittos", "Virtuose", "Maître du social"],
+    "website": ["twitter.com", "tweetdeck.twitter.com"],
+    "minutesByLevel": [30, 60, 300, 720, 1440],
+    "maxLevel": 5
+  },
+  {
+    "id": "wikiuptime",
+    "name": "Wikipédia",
+    "descriptionByLevel": ["Le savoir c'est le pouvoir", "Un wiki pour les gouverner tous", "Bientôt au niveau d'Einstein"],
+    "website": ["fr.wikipedia.org", "en.wikipedia.org", "wikipedia.org"],
+    "minutesByLevel": [720, 1440, 4320],
+    "maxLevel": 3
+  },
+  {
+    "id": "9guptime",
+    "name": "9gag",
+    "descriptionByLevel": ["Imgur's better", "4chan's better"],
+    "website": ["9gag.com"],
+    "minutesByLevel": [1440, 4320],
+    "maxLevel": 2
+  },
+  {
+    "id": "4chanuptime",
+    "name": "4chan",
+    "descriptionByLevel": ["Va voir alleurs c'est mieux pour toi", "Je t'aurais prévenu"],
+    "website": ["4chan.org"],
+    "minutesByLevel": [720, 1440],
+    "maxLevel": 2
+  },
+  {
+    "id": "imguptime",
+    "name": "imgur",
+    "descriptionByLevel": ["Tu n'es pas encore prêt pour usersub", "Là c'est chaud quand même", "Bon OK faut arrêter maintenant", "Quelle date pour la consulation ?"],
+    "website": ["imgur.com"],
+    "minutesByLevel": [600, 1440, 2880, 6000],
+    "maxLevel": 4
+  },
+  {
+    "id": "discuptime",
+    "name": "Discord",
+    "descriptionByLevel": ["Noob", "Attention à ta scolarité", "Hardcore gamer"],
+    "website": ["discordapp.com"],
+    "minutesByLevel": [720, 2880, 7200],
+    "maxLevel": 3
+  },
+  {
+    "id": "twitchuptime",
+    "name": "Twitch",
+    "descriptionByLevel": ["Viewer en or", "N'oublie pas les donations"],
+    "website": ["twitch.tv"],
+    "minutesByLevel": [720, 2880],
+    "maxLevel": 2
+  }
+]

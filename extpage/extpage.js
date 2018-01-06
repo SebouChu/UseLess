@@ -1,5 +1,7 @@
-chrome.storage.onChanged.addListener(function() {
-  document.location.reload();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+  if (areaName == "sync") {
+    document.location.reload();
+  }
 });
 
 // Récupère le contenu d'un JSON en AJAX

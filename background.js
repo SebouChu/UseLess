@@ -63,9 +63,9 @@ function initStorageData() {
     getJSON("achievements/uptime.json").then(function(uptimeJSON) {
       var achievementsByDomain = getAchievementsByDomain(onetimeJSON, uptimeJSON);
       chrome.storage.sync.set(achievementsByDomain, function() {
-        console.log("Storage data initialized.");
-        showStorage();
+        console.log("Achievements by Domain: initialized.");
       });
+      initUptimeStorageData(uptimeJSON);
     });
   });
 }
@@ -95,9 +95,27 @@ function getAchievementsByDomain(onetimeJSON, uptimeJSON) {
   }
 
   return achievementsByDomain;
-
 }
 
+function initUptimeStorageData(uptimeAchievements) {
+  var outputData = {};
+  uptimeAchievements.forEach(function(achievement, index) {
+    chrome.storage.sync.get(achievement["id"], function(result) {
+      if (result[achievement["id"]] === undefined) {
+        outputData[achievement["id"]] = {
+          level: 0,
+          uptimeMinutes: 0
+        };
+      }
+      if (index == uptimeAchievements.length - 1) {
+        chrome.storage.sync.set(outputData, function() {
+          console.log("UptimeAchievements: initialized.");
+          showStorage();
+        });
+      }
+    });
+  });
+}
 
 /****************
  * MESSAGE RECU *

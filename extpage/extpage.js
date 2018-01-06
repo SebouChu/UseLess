@@ -7,17 +7,45 @@ chrome.storage.onChanged.addListener(function(changes, areaName) {
 // Récupère le contenu d'un JSON en AJAX
 function getJSON(url) {
   return new Promise(function(resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', chrome.extension.getURL(url), true);
-      xhr.responseType = 'json';
-      xhr.onload = function() {
-          if (xhr.status == 200) {
-              resolve(xhr.response);
-          } else {
-              reject(xhr.status);
-          }
-      };
-      xhr.send();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', chrome.extension.getURL(url), true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      if (xhr.status == 200) {
+          resolve(xhr.response);
+      } else {
+          reject(xhr.status);
+      }
+    };
+    xhr.send();
+  });
+}
+
+// Récupère le contenu d'un SVG en AJAX
+function getSVGElement(url) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onload = function() {
+      if (xhr.status == 200) {
+        var parser = new DOMParser(),
+        result = parser.parseFromString(xhr.responseText, 'text/xml'),
+        inlinedSVG = result.getElementsByTagName('svg')[0];
+        inlinedSVG.removeAttribute('xmlns:a');
+        inlinedSVG.removeAttribute('width');
+        inlinedSVG.removeAttribute('height');
+        inlinedSVG.removeAttribute('x');
+        inlinedSVG.removeAttribute('y');
+        inlinedSVG.removeAttribute('enable-background');
+        inlinedSVG.removeAttribute('xmlns:xlink');
+        inlinedSVG.removeAttribute('xml:space');
+        inlinedSVG.removeAttribute('version');
+        resolve(inlinedSVG);
+      } else {
+        reject(xhr.status);
+      }
+    };
+    xhr.send();
   });
 }
 
@@ -48,7 +76,7 @@ function generateOnetimeElt(achievement, isLast = false) {
   onetimeElt = onetimeElt.replace(/__name__/g, achievement["name"]);
   onetimeElt = onetimeElt.replace(/__description__/, achievement["description"]);
   if(achievement["icon"] !== undefined) {
-    onetimeElt = onetimeElt.replace(/__img-link__/, "../"+achievement["icon"]);
+    onetimeElt = onetimeElt.replace(/__img-link__/, "../assets/icons/onetime/"+achievement["icon"]);
   } else {
     onetimeElt = onetimeElt.replace(/__img-link__/, "../logo.png");
   }
@@ -101,7 +129,7 @@ function generateUptimeElt(achievement, isLast = false) {
     uptimeElt = uptimeElt.replace(/__level__/, level);
 
     if(achievement["icon"] !== undefined) {
-      uptimeElt = uptimeElt.replace(/__img-link__/, "../"+achievement["icon"]);
+      uptimeElt = uptimeElt.replace(/__img-link__/, "../assets/icons/uptime/"+achievement["icon"]);
     } else {
       uptimeElt = uptimeElt.replace(/__img-link__/, "../logo.png");
     }
@@ -117,6 +145,19 @@ function generateUptimeElt(achievement, isLast = false) {
     uptimeAchievements += uptimeElt;
     if (isLast) {
       uptimeAchievementsElt.innerHTML = uptimeAchievements;
+      setInlineSVGs();
+    }
+  });
+}
+
+function setInlineSVGs() {
+  var imgElts = document.querySelectorAll("img");
+  imgElts.forEach(function(imgItem, index) {
+    if (imgItem.src.match(/^(.+)\.svg$/)) {
+      getSVGElement(imgItem.src).then(function(svgElt) {
+        svgElt.setAttribute("class", imgItem.getAttribute("class"));
+        imgItem.parentNode.replaceChild(svgElt, imgItem);
+      });
     }
   });
 }

@@ -3,79 +3,91 @@
     "id": "wikionetime",
     "name": "Wikipédia",
     "description": "Il suffit d'un café",
-    "icon": "assets/icons/wikionetime.png",
+    "icon": "wikionetime.svg",
     "domains": ["fr.wikipedia.org", "en.wikipedia.org", "wikipedia.org"]
   },
   {
     "id": "9gonetime",
     "name": "9gag",
     "description": "Reddit's better",
+    "icon": "9gonetime.svg",
     "domains": ["9gag.com"]
   },
   {
     "id": "4chanonetime",
     "name": "4chan",
     "description": "Fuis !",
+    "icon": "4chanonetime.svg",
     "domains": ["4chan.org"]
   },
   {
     "id": "imgonetime",
     "name": "imgur",
     "description": "Toujours mieux que 9gag...",
+    "icon": "imgonetime.svg",
     "domains": ["imgur.com"]
   },
   {
     "id": "doconetime",
     "name": "Doctissimo",
     "description": "Vous risquez un cancer phase terminale",
+    "icon": "doconetime.svg",
     "domains": ["doctissimo.fr"]
   },
   {
     "id": "disconetime",
     "name": "Discord",
     "description": "Gaming for life",
+    "icon": "disconetime.svg",
     "domains": ["discordapp.com"]
   },
   {
     "id": "utonetime",
     "name": "uTorrent",
     "description": "Pirate",
+    "icon": "utonetime.svg",
     "domains": ["utorrent.com"]
   },
   {
     "id": "toronetime",
     "name": "Tor",
     "description": "Je vois ce que t'essaie de faire",
+    "icon": "toronetime.svg",
     "domains": ["torproject.org"]
   },
   {
     "id": "g2aonetime",
     "name": "G2A",
     "description": "VAC Ban inc",
+    "icon": "g2aonetime.svg",
     "domains": ["g2a.com"]
   },
   {
     "id": "twitchonetime",
     "name": "Twitch",
     "description": "Pire que la télé",
+    "icon": "twitchonetime.svg",
     "domains": ["twitch.tv"]
   },
   {
     "id": "amazonetime",
     "name": "Amazon",
     "description": "-40% avec le code \"NONJDECONNE\"",
+    "icon": "amazonetime.svg",
     "domains": ["amazon.fr", "amazon.com"]
   },
   {
     "id": "netonetime",
     "name": "Netflix",
     "description": "www.hbo.com",
+    "icon": "netonetime.svg",
     "domains": ["netflix.com"]
   },
   {
     "id": "gitonetime",
     "name": "GitHub",
     "description": "Bienvenue dans l'antre d'Internet!",
+    "icon": "gitonetime.svg",
     "domains": ["github.com"]
   }
 ]

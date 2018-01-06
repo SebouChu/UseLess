@@ -1,4 +1,8 @@
-img {
+h1 {
+  text-align: center;
+}
+
+img, svg {
   width: 90%;
   height: auto;
   vertical-align: middle;
@@ -6,9 +10,8 @@ img {
 
 #onetime-achievements, #uptime-achievements {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
 }
 
 .onetime-achievement, .uptime-achievement {
@@ -41,4 +44,62 @@ img {
 
 .text-container {
   grid-area: 1 / 2 / 2 / 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text-container p {
+  margin: .5em;
+}
+
+
+/* SVG Custom by Level */
+
+svg.level-0 {
+  fill: #000;
+}
+
+svg.level-0 *[stroke="#000000"] {
+  stroke: #000;
+}
+
+svg.level-1 {
+  fill: #CD7F32;
+}
+
+svg.level-1 *[stroke="#000000"] {
+  stroke: #CD7F32;
+}
+
+svg.level-2 {
+  fill: #C0C0C0;
+}
+
+svg.level-2 *[stroke="#000000"] {
+  stroke: #C0C0C0;
+}
+
+svg.level-3 {
+  fill: #FFD700;
+}
+
+svg.level-3 *[stroke="#000000"] {
+  stroke: #FFD700;
+}
+
+svg.level-4 {
+  fill: #45ACA5;
+}
+
+svg.level-4 *[stroke="#000000"] {
+  stroke: #45ACA5;
+}
+
+svg.level-5 {
+  fill: #E40D22;
+}
+
+svg.level-5 *[stroke="#000000"] {
+  stroke: #E40D22;
 }

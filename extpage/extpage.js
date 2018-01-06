@@ -93,8 +93,10 @@ function generateUptimeElt(achievement, isLast = false) {
   uptimeElt = uptimeElt.replace(/__name__/g, achievement["name"]);
   chrome.storage.sync.get(achievement["id"], function(result) {
     let storageData = result[achievement["id"]];
+    let level = storageData["level"];
     let descriptionIndex = Math.max(1, storageData["level"]) - 1;
     uptimeElt = uptimeElt.replace(/__description__/, achievement["descriptionByLevel"][descriptionIndex]);
+    uptimeElt = uptimeElt.replace(/__level__/, level);
 
     if(achievement["icon"] !== undefined) {
       uptimeElt = uptimeElt.replace(/__img-link__/, "../"+achievement["icon"]);
@@ -107,7 +109,7 @@ function generateUptimeElt(achievement, isLast = false) {
     } else {
       uptimeElt = uptimeElt.replace(/__achieved__/, "achieved");
       var formattedDate = storageData["achievedDate"]
-      uptimeElt = uptimeElt.replace(/__achieved-subtitle__/, " <em>(niveau "+storageData["level"]+" obtenu le "+formattedDate+")</em>");
+      uptimeElt = uptimeElt.replace(/__achieved-subtitle__/, " <em>(niveau "+level+" obtenu le "+formattedDate+")</em>");
     }
 
     uptimeAchievements += uptimeElt;

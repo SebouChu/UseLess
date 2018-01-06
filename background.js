@@ -124,27 +124,23 @@ function initUptimeStorageData(uptimeAchievements) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var currentDate = new Date();
-  var match = request.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/);
-  var domain = match[1];
+  var currentDomain = request.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/)[1];
 
   chrome.storage.sync.get("onetimeDomains", function(result) {
     // Si le domaine possède un ou des achievements
-    if(result["onetimeDomains"][domain] !== undefined) {
-      getJSON("achievements/onetime.json").then(function(json) {
-        // On parcourt les achievementsIndex du domaine
-        for (var i = 0 ; i < result["onetimeDomains"][domain].length ; i++) {
-          var achievementIndex = result["onetimeDomains"][domain][i];
-          // On récupère l'achievement correspondant dans le JSON
-          var achievement = json[achievementIndex];
-          checkAchievement(achievement, currentDate.toLocaleString());
-        }
+    if(result["onetimeDomains"][currentDomain] !== undefined) {
+      var achievementIndex = result["onetimeDomains"][currentDomain];
+      getJSON("achievements/onetime.json").then(function(onetimeJSON) {
+        // On récupère l'achievement correspondant dans le JSON
+        var achievement = onetimeJSON[achievementIndex];
+        checkOneTimeAchievement(achievement, currentDate.toLocaleString());
       });
     }
   });
 });
 
 // Check l'achievement s'il n'est pas déjà obtenu
-function checkAchievement(achievement, currentDate) {
+function checkOneTimeAchievement(achievement, currentDate) {
   chrome.storage.sync.get(achievement["id"], function(result) {
     // Si l'achievement n'est pas déjà obtenu, on l'active
     if(!result[achievement["id"]]) {
@@ -181,6 +177,5 @@ function postOneTimeNotification(achievement) {
     iconUrl: 'logo.png',
     isClickable: true
   }
-  console.log(achievement);
   chrome.notifications.create(options);
 }

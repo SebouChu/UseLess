@@ -2,8 +2,8 @@
     "manifest_version": 2,
 
     "name": "UseLess",
-    "description": "Système d'achievements",
-    "version": "0.1",
+    "description": "Extension pour des achievements de qualité !",
+    "version": "1.0",
 
     "browser_action": {
       "default_icon": "logo.png"

@@ -117,17 +117,19 @@ function initUptimeStorageData(uptimeAchievements) {
   });
 }
 
-/****************
- * MESSAGE RECU *
- ****************/
+/**********************
+ * MESSAGE MANAGEMENT *
+ **********************/
 
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  var currentDate = new Date();
-  var currentDomain = request.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/)[1];
 
+  var currentDate = new Date();
+  var currentDomain = request.domain;
+
+  // Gestion des OneTimeAchievements
   chrome.storage.sync.get("onetimeDomains", function(result) {
-    // Si le domaine possède un ou des achievements
+    // Si le domaine possède un OneTimeAchievement
     if(result["onetimeDomains"][currentDomain] !== undefined) {
       var achievementIndex = result["onetimeDomains"][currentDomain];
       getJSON("achievements/onetime.json").then(function(onetimeJSON) {
@@ -137,7 +139,83 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       });
     }
   });
+
+  // Appelle la méthode qui gère l'alarme Chrome pour les UptimeAchievements
+  checkCurrentDomain(currentDomain);
+
 });
+
+/***************************
+ * SELECTED TAB MANAGEMENT *
+ ***************************/
+
+// Quand l'onglet actif change
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+
+  console.log(activeInfo);
+  // Récupération de l'onglet actif
+  let activeTab = chrome.tabs.get(activeInfo.tabId, function(tab) {
+    var currentDomain = tab.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/)[1];
+
+    // Appelle la méthode qui gère l'alarme Chrome pour les UptimeAchievements
+    checkCurrentDomain(currentDomain);
+  });
+
+});
+
+/********************
+ * ALARM MANAGEMENT *
+ ********************/
+
+function checkCurrentDomain(currentDomain) {
+  // Gestion de l'alarme des UptimeAchievements
+  chrome.storage.sync.get("uptimeDomains", function(resultDomains) {
+    var uptimeDomains = resultDomains["uptimeDomains"];
+    // On vérifie si le domaine actuel possède un UptimeAchievement
+    var domainHasAchievement = uptimeDomains[currentDomain] !== undefined;
+
+    chrome.storage.sync.get("alarmDomain", function(resultAlarm) {
+      var alarmDomain = resultAlarm["alarmDomain"];
+      // Si le domaine a changé
+      if (alarmDomain !== currentDomain) {
+        // Si les deux domaines n'ont pas le même achievement
+        if (uptimeDomains[alarmDomain] !== uptimeDomains[currentDomain]) {
+          if (alarmDomain !== undefined) {
+            chrome.alarms.clear("uptimeAlarm"); // On supprime l'alarme si elle a été créée
+            console.log("Alarm cleared.");
+          }
+          if (domainHasAchievement) {
+            console.log("Domain has an uptimeAchievement");
+            // Si le nouveau domaine a un achievement, on met une alarme et on règle l'alarmDomain
+            chrome.storage.sync.set({"alarmDomain": currentDomain});
+
+            let alarmOptions = {
+              delayInMinutes: 1,
+              periodInMinutes: 1
+            }
+            chrome.alarms.create("uptimeAlarm", alarmOptions);
+            console.log("Alarm created.");
+          } else {
+            console.log("Domain hasn't an uptimeAchievement");
+            // Sinon on supprime l'alarmDomain
+            chrome.storage.sync.remove("alarmDomain");
+          }
+        }
+      }
+    });
+  });
+}
+
+// Quand l'alarme sonne
+chrome.alarms.onAlarm.addListener(function(alarm) {
+  if (alarm.name == "uptimeAlarm") {
+    chrome.storage.sync.get("alarmDomain", function(result) {
+      console.log("bipbip");
+    });
+  }
+});
+
+
 
 // Check l'achievement s'il n'est pas déjà obtenu
 function checkOneTimeAchievement(achievement, currentDate) {
@@ -170,12 +248,12 @@ chrome.notifications.onClicked.addListener(function(notificationId) {
 });
 
 function postOneTimeNotification(achievement) {
-  var options = {
+  var notificationOptions = {
     type: "basic",
     title: achievement["name"],
     message: achievement["description"],
     iconUrl: 'logo.png',
     isClickable: true
   }
-  chrome.notifications.create(options);
+  chrome.notifications.create(notificationOptions);
 }

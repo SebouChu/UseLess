@@ -2,12 +2,9 @@ var dataInterval = setInterval(sendData, 1000);
 
 // Fonction récupérant les données (URL, Domaine, HTML) et les envoie au script background via le système de messages Chrome
 function sendData() {
-  let tabURL = window.location.href;
-  let tabHTML = document.body.innerHTML;
-
+  let tabDomain = window.location.href.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/)[1];
   let data = {
-    url: tabURL,
-    html: tabHTML
+    domain: tabDomain
   };
 
   chrome.runtime.sendMessage(data);

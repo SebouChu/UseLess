@@ -211,15 +211,24 @@ function checkCurrentDomain(currentDomain) {
 // Quand l'alarme sonne
 chrome.alarms.onAlarm.addListener(function(alarm) {
   if (alarm.name == "uptimeAlarm") {
-    chrome.storage.local.get("alarmDomain", function(result) {
-      console.log("bipbip");
+    chrome.storage.local.get("alarmDomain", function(resultAlarmDomain) {
+      let domain = resultAlarmDomain["alarmDomain"];
+      chrome.storage.sync.get("uptimeDomains", function(resultDomains) {
+        var achievementIndex = resultDomains["uptimeDomains"][domain];
+        getJSON("achievements/uptime.json").then(function(uptimeJSON) {
+          // On récupère l'achievement correspondant dans le JSON
+          var achievement = uptimeJSON[achievementIndex];
+          let currentDate = new Date();
+          checkUptimeAchievement(achievement, currentDate.toLocaleString());
+        });
+      });
     });
   }
 });
 
 
 
-// Check l'achievement s'il n'est pas déjà obtenu
+// Check le OneTimeAchievement s'il n'est pas déjà obtenu
 function checkOneTimeAchievement(achievement, currentDate) {
   chrome.storage.sync.get(achievement["id"], function(result) {
     // Si l'achievement n'est pas déjà obtenu, on l'active
@@ -237,6 +246,29 @@ function checkOneTimeAchievement(achievement, currentDate) {
   });
 }
 
+// Check le UptimeAchievement par rapport au compteur et au level actuel
+function checkUptimeAchievement(achievement, currentDate) {
+  let achievementId = achievement["id"];
+  chrome.storage.sync.get(achievementId, function(result) {
+    var storageData = result[achievementId];
+    let currentLevel = storageData["level"];
+    var levelUp = false;
+    if (currentLevel < achievement["maxLevel"]) {
+      storageData["uptimeMinutes"] += 1;
+      if (storageData["uptimeMinutes"] == achievement["minutesByLevel"][currentLevel]) {
+        storageData["level"] += 1;
+        levelUp = true;
+        storageData["achievedDate"] = currentDate;
+      }
+      var data = {};
+      data[achievementId] = storageData;
+      chrome.storage.sync.set(data);
+
+      // On envoie une notification si levelUp
+      if (levelUp) { postUptimeNotification(achievement, storageData); }
+    }
+  })
+}
 
 
 /*****************
@@ -254,6 +286,19 @@ function postOneTimeNotification(achievement) {
     type: "basic",
     title: achievement["name"],
     message: achievement["description"],
+    iconUrl: 'logo.png',
+    isClickable: true
+  }
+  chrome.notifications.create(notificationOptions);
+}
+
+function postUptimeNotification(achievement, storageData) {
+  let notificationTitle = `${achievement["name"]} - Niveau ${storageData["level"]}`;
+  let notificationMessage = achievement["descriptionByLevel"][storageData["level"] - 1];
+  var notificationOptions = {
+    type: "basic",
+    title: notificationTitle,
+    message: notificationMessage,
     iconUrl: 'logo.png',
     isClickable: true
   }

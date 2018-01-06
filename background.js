@@ -155,10 +155,12 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
   console.log(activeInfo);
   // Récupération de l'onglet actif
   let activeTab = chrome.tabs.get(activeInfo.tabId, function(tab) {
-    var currentDomain = tab.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/)[1];
+    if (tab.url != "") {
+      var currentDomain = tab.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/)[1];
 
-    // Appelle la méthode qui gère l'alarme Chrome pour les UptimeAchievements
-    checkCurrentDomain(currentDomain);
+      // Appelle la méthode qui gère l'alarme Chrome pour les UptimeAchievements
+      checkCurrentDomain(currentDomain);
+    }
   });
 
 });
@@ -174,7 +176,7 @@ function checkCurrentDomain(currentDomain) {
     // On vérifie si le domaine actuel possède un UptimeAchievement
     var domainHasAchievement = uptimeDomains[currentDomain] !== undefined;
 
-    chrome.storage.sync.get("alarmDomain", function(resultAlarm) {
+    chrome.storage.local.get("alarmDomain", function(resultAlarm) {
       var alarmDomain = resultAlarm["alarmDomain"];
       // Si le domaine a changé
       if (alarmDomain !== currentDomain) {
@@ -187,7 +189,7 @@ function checkCurrentDomain(currentDomain) {
           if (domainHasAchievement) {
             console.log("Domain has an uptimeAchievement");
             // Si le nouveau domaine a un achievement, on met une alarme et on règle l'alarmDomain
-            chrome.storage.sync.set({"alarmDomain": currentDomain});
+            chrome.storage.local.set({"alarmDomain": currentDomain});
 
             let alarmOptions = {
               delayInMinutes: 1,
@@ -198,7 +200,7 @@ function checkCurrentDomain(currentDomain) {
           } else {
             console.log("Domain hasn't an uptimeAchievement");
             // Sinon on supprime l'alarmDomain
-            chrome.storage.sync.remove("alarmDomain");
+            chrome.storage.local.remove("alarmDomain");
           }
         }
       }
@@ -209,7 +211,7 @@ function checkCurrentDomain(currentDomain) {
 // Quand l'alarme sonne
 chrome.alarms.onAlarm.addListener(function(alarm) {
   if (alarm.name == "uptimeAlarm") {
-    chrome.storage.sync.get("alarmDomain", function(result) {
+    chrome.storage.local.get("alarmDomain", function(result) {
       console.log("bipbip");
     });
   }

@@ -2,7 +2,7 @@
   {
     "id": "fbuptime",
     "name": "Facebook",
-    "descriptionByLevel": ["Novice", "Intermmédiaire", "Aficionado", "Virtuose", "Maître du social"],
+    "descriptionByLevel": ["Novice", "Intermédiaire", "Aficionado", "Virtuose", "Maître du social"],
     "icon": "fbuptime.svg",
     "domains": ["facebook.com"],
     "minutesByLevel": [30, 60, 300, 720, 1440],
@@ -11,7 +11,7 @@
   {
     "id": "twituptime",
     "name": "Twitter",
-    "descriptionByLevel": ["Novice", "Intermmédiaire", "Twittos", "Virtuose", "Maître du social"],
+    "descriptionByLevel": ["Novice", "Intermédiaire", "Twitto", "Virtuose", "Maître du social"],
     "icon": "twituptime.svg",
     "domains": ["twitter.com", "tweetdeck.twitter.com"],
     "minutesByLevel": [1, 2, 3, 4, 5],

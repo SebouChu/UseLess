@@ -152,7 +152,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 // Quand l'onglet actif change
 chrome.tabs.onActivated.addListener(function(activeInfo) {
 
-  console.log(activeInfo);
+  // Affichage de l'objet contenant l'id du tab et l'id de la window
+  //console.log(activeInfo);
+  
   // Récupération de l'onglet actif
   let activeTab = chrome.tabs.get(activeInfo.tabId, function(tab) {
     if (tab.url != "") {
@@ -184,10 +186,10 @@ function checkCurrentDomain(currentDomain) {
         if (uptimeDomains[alarmDomain] !== uptimeDomains[currentDomain]) {
           if (alarmDomain !== undefined) {
             chrome.alarms.clear("uptimeAlarm"); // On supprime l'alarme si elle a été créée
-            console.log("Alarm cleared.");
+            //console.log("Alarm cleared.");
           }
           if (domainHasAchievement) {
-            console.log("Domain has an uptimeAchievement");
+            //console.log("Domain has an uptimeAchievement");
             // Si le nouveau domaine a un achievement, on met une alarme et on règle l'alarmDomain
             chrome.storage.local.set({"alarmDomain": currentDomain});
 
@@ -196,9 +198,9 @@ function checkCurrentDomain(currentDomain) {
               periodInMinutes: 1
             }
             chrome.alarms.create("uptimeAlarm", alarmOptions);
-            console.log("Alarm created.");
+            //console.log("Alarm created.");
           } else {
-            console.log("Domain hasn't an uptimeAchievement");
+            //console.log("Domain hasn't an uptimeAchievement");
             // Sinon on supprime l'alarmDomain
             chrome.storage.local.remove("alarmDomain");
           }
